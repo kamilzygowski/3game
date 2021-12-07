@@ -77,8 +77,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Grid and grid helper
  */
-const gridHelper = new THREE.GridHelper(2000,20);
-scene.add(gridHelper);
+/*const gridHelper = new THREE.GridHelper(2000,20);
+scene.add(gridHelper);*/
 
 /**
  * Draw ground
@@ -88,13 +88,34 @@ const groundMap = new THREE.TextureLoader().load('https://i.postimg.cc/ZKr4dWxm/
 const groundMaterial = new THREE.MeshBasicMaterial({map:groundMap});
 const ground = new THREE.Mesh(groundShape,groundMaterial);
 scene.add(ground);
-ground.scale.set(100, 1,100);
-ground.position.set(0,0,0);
-const ground2 = ground.clone();
-scene.add(ground2);
-ground2.scale.set(100, 1,100);
-ground2.position.set(100,0,100);
-ground2.position.set(0,0,100);
+
+let groundSQM = {};
+
+function groundMaker(size,x,z){
+  for (let i=0; i<size; i++){
+    
+    groundSQM['g' + i] = ground.clone();
+    groundSQM['g' + i].scale.set(100, 1,100);
+    groundSQM['g' + i].position.set(x * 100,0, z * i * 100);
+    scene.add(groundSQM['g' + i]);
+  }
+}
+
+function groundDraw(sizeX, sizeZ){
+  for (let i =0; i < sizeX*sizeZ; i++){
+    groundMaker(50,sizeX-i,sizeZ);
+    groundMaker(50,-sizeX+i,sizeZ);
+    groundMaker(50,sizeX-i,-sizeZ);
+    groundMaker(50,-sizeX+i,-sizeZ);
+    groundMaker(50,0,-sizeZ);
+    groundMaker(50,0,sizeZ);
+  }
+}
+
+// Parameter describes the number of SQMS in map rendering, drawning ground func is ready to use
+// Number of sizeX means the numbers of left-right sqms, chasnging size in groundMaker func changes the north-south sqms
+groundDraw(100,1);
+
 /**
  * Draw Player
  */
@@ -108,7 +129,7 @@ player.position.y = 50;
 player.position.z = 0;
 player.scale.set(10,100,10);
 player.height =50 ;
-player.speed = 0.9;
+player.speed = 2.9;
 player.jumpHeight = 2.7;
 player.turnSpeed = .1;
 player.velocity = 0;
@@ -126,7 +147,7 @@ scene.add(camera);
 /**
  * Background texture
  */
-const backgroundTexture = new THREE.TextureLoader().load('https://i.postimg.cc/5tZ7fwNv/pexels-johannes-plenio-2850287.jpg');
+const backgroundTexture = new THREE.TextureLoader().load('https://i.postimg.cc/nr3DqRGN/pexels-abdullah-ghatasheh-1631677.jpg');
 scene.background = backgroundTexture;
 
 /**
