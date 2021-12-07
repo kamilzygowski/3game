@@ -84,8 +84,10 @@ scene.add(gridHelper);*/
  * Draw ground
  */
 const groundShape = new THREE.BoxGeometry(1,1,1);
-const groundMap = new THREE.TextureLoader().load('https://i.postimg.cc/ZKr4dWxm/kamien.png');
-const groundMaterial = new THREE.MeshBasicMaterial({map:groundMap});
+const groundMap = new THREE.TextureLoader().load('https://i.postimg.cc/rFR2rdjw/kamien-kopia.png');
+// https://i.postimg.cc/NjVyxrqC/trawka2-kopia.png
+const groundNormal = new THREE.TextureLoader().load('https://i.postimg.cc/4yT2Hdxm/normal-mapping-normal-map.png');
+const groundMaterial = new THREE.MeshBasicMaterial({map:groundMap, normalMap:groundNormal });
 const ground = new THREE.Mesh(groundShape,groundMaterial);
 scene.add(ground);
 
@@ -149,6 +151,16 @@ scene.add(camera);
  */
 const backgroundTexture = new THREE.TextureLoader().load('https://i.postimg.cc/nr3DqRGN/pexels-abdullah-ghatasheh-1631677.jpg');
 scene.background = backgroundTexture;
+
+/***********************************************
+ ***************** Drawing the Environment*******
+ ***********************************************/
+ const poleShape = new THREE.BoxGeometry(1,1,1);
+ const poleMaterial = new THREE.MeshBasicMaterial({color:'red'});
+ const pole = new THREE.Mesh(poleShape, poleMaterial);
+ pole.position.set(1, 50, -120);
+ pole.scale.set(20, 50, 20);
+ scene.add(pole);
 
 /**
  *
@@ -219,7 +231,8 @@ function update(){
 const clock = new THREE.Clock()
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
-update();
+  update();
+  console.log('x: ' + camera.position.x,'y: ' +  camera.position.y, 'z: ' + camera.position.z);
   //player.position.x += 0.3;
 
   //mesh.rotation.y += 0.01 * Math.sin(1)
