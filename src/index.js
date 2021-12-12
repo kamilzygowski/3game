@@ -155,11 +155,13 @@ scene.background = backgroundTexture;
 /***********************************************
  ***************** Drawing the Environment*******
  ***********************************************/
- const poleShape = new THREE.BoxGeometry(1,1,1);
- const poleMaterial = new THREE.MeshBasicMaterial({color:'red'});
+ const poleShape = new THREE.SphereGeometry(0.5,5,32);
+ const poleNormal = new THREE.TextureLoader().load('https://i.postimg.cc/QN032K9J/pobrane-2.jpg');
+ const poleMap = new THREE.TextureLoader().load('https://i.postimg.cc/bYK7c0Yb/sparkly-silver-rock-background-texture-stone-close-up-grey-black-white-151800310.jpg');
+ const poleMaterial = new THREE.MeshBasicMaterial({map:poleMap, normalMap:poleMap});
  const pole = new THREE.Mesh(poleShape, poleMaterial);
- pole.position.set(1, 50, -120);
- pole.scale.set(20, 50, 20);
+ pole.position.set(1, 17, -120);
+ pole.scale.set(180, 100, 20);
  scene.add(pole);
 
 /**
