@@ -8,6 +8,9 @@ import * as dat from 'dat.gui'
 
 const gui = new dat.GUI()
 
+let playerCanMove = true;
+let distance;
+
 /**
  * Base
  */
@@ -164,6 +167,23 @@ scene.background = backgroundTexture;
  pole.scale.set(180, 100, 20);
  scene.add(pole);
 
+ const collider = (player, object) => {
+   // Distance formula between two points in 3 dimensions
+   distance = Math.sqrt(Math.pow((object.position.x - player.position.x),2) + Math.pow((object.position.y - player.position.y),2) + Math.pow((object.position.z - player.position.z),2));
+    console.log(distance);
+    if(distance <= 40){
+      playerCanMove = false;
+      
+      console.log('dystans 0');
+      
+    } else {
+      
+    }
+
+ }
+
+
+
 /**
  *
  * Controls listeners
@@ -173,29 +193,29 @@ scene.background = backgroundTexture;
 
 function control() {
   // Controls:Engine 
-  if(controls[87]){ // w
+  if(controls[87] && playerCanMove){ // w
     camera.position.x += Math.sin(camera.rotation.y) * player.speed;
     camera.position.z += -Math.cos(camera.rotation.y) * player.speed;
   }
-  if(controls[83]){ // s
+  if(controls[83] && playerCanMove){ // s
     camera.position.x -= Math.sin(camera.rotation.y) * player.speed;
     camera.position.z -= -Math.cos(camera.rotation.y) * player.speed;
   }
-  if(controls[65]){ // a
+  if(controls[65] && playerCanMove){ // a
     camera.position.x += Math.sin(camera.rotation.y - Math.PI / 2) * player.speed;
     camera.position.z += -Math.cos(camera.rotation.y - Math.PI / 2) * player.speed;
   }
-  if(controls[68]){ // d
+  if(controls[68] && playerCanMove){ // d
     camera.position.x += Math.sin(camera.rotation.y + Math.PI / 2) * player.speed;
     camera.position.z += -Math.cos(camera.rotation.y + Math.PI / 2) * player.speed;
   }
-  if(controls[37]){ // la
+  if(controls[37] && playerCanMove){ // la
     camera.rotation.y -= player.turnSpeed;
   }
-  if(controls[39]){ // ra
+  if(controls[39] && playerCanMove){ // ra
     camera.rotation.y += player.turnSpeed;
   }
-  if(controls[32]) { // space
+  if(controls[32] && playerCanMove) { // space
     if(player.jumps) return false;
     player.jumps = true;
     player.velocity = -player.jumpHeight;
@@ -234,7 +254,7 @@ const clock = new THREE.Clock()
 const tick = () => {
   const elapsedTime = clock.getElapsedTime()
   update();
-  console.log('x: ' + camera.position.x,'y: ' +  camera.position.y, 'z: ' + camera.position.z);
+  //console.log('x: ' + camera.position.x,'y: ' +  camera.position.y, 'z: ' + camera.position.z);
   //player.position.x += 0.3;
 
   //mesh.rotation.y += 0.01 * Math.sin(1)
@@ -245,6 +265,7 @@ const tick = () => {
   //controls.update()
   // Render
   renderer.render(scene, camera)
+  collider(camera,pole);
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick)
